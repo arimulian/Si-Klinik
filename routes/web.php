@@ -3,16 +3,14 @@
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/login',[LoginController::class,'index']);
+Route::middleware('guest')->group(function (){
+Route::get('/login',[LoginController::class,'index'])->name('login');
 Route::post('/login',[LoginController::class,'authenticate'])->name('authenticate');
-Route::get('/', fn() => view('dashboard'))->name('dashboard');
-
-Route::get('/kunjugan', [\App\Http\Controllers\KunjunganController::class,'index'])->name('kunjungan.list');
-Route::get('/kunjugan/create', [\App\Http\Controllers\KunjunganController::class,'create'])->name('kunjungan.create');
-Route::post('/kunjugan/store', [\App\Http\Controllers\KunjunganController::class,'store'])->name('kunjungan.store');
+});
 
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', fn() => view('dashboard'))->name('dashboard');
 //    PASIEN
     Route::get('/pasien', [\App\Http\Controllers\PasienController::class,'index'])->name('pasien.list');
     Route::get('/pasien/create', [\App\Http\Controllers\PasienController::class,'create'])->name('pasien.create');
@@ -29,13 +27,18 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/obat/{obat:id}/update', [\App\Http\Controllers\ObatController::class,'update'])->name('obat.update');
     Route::delete('/obat/{obat:id}', [\App\Http\Controllers\ObatController::class,'destroy'])->name('obat.destroy');
 
-//    PEGAWAI
-    Route::get('/pegawai', [\App\Http\Controllers\PegawaiController::class,'index'])->name('pegawai.list');
-    Route::get('/pegawai/create', [\App\Http\Controllers\PegawaiController::class,'create'])->name('pegawai.create');
-    Route::post('/pegawai/store', [\App\Http\Controllers\PegawaiController::class,'store'])->name('pegawai.store');
-    Route::get('/pegawai/{pegawai:id}/edit', [\App\Http\Controllers\PegawaiController::class,'edit'])->name('pegawai.edit');
-    Route::put('/pegawai/{pegawai:id}/update', [\App\Http\Controllers\PegawaiController::class,'update'])->name('pegawai.update');
-    Route::delete('/pegawai/{pegawai:id}', [\App\Http\Controllers\PegawaiController::class,'destroy'])->name('pegawai.destroy');
+
+    Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function() {
+
+        //    PEGAWAI
+        Route::get('/pegawai', [\App\Http\Controllers\PegawaiController::class,'index'])->name('pegawai.list');
+        Route::get('/pegawai/create', [\App\Http\Controllers\PegawaiController::class,'create'])->name('pegawai.create');
+        Route::post('/pegawai/store', [\App\Http\Controllers\PegawaiController::class,'store'])->name('pegawai.store');
+        Route::get('/pegawai/{pegawai:id}/edit', [\App\Http\Controllers\PegawaiController::class,'edit'])->name('pegawai.edit');
+        Route::put('/pegawai/{pegawai:id}/update', [\App\Http\Controllers\PegawaiController::class,'update'])->name('pegawai.update');
+        Route::delete('/pegawai/{pegawai:id}', [\App\Http\Controllers\PegawaiController::class,'destroy'])->name('pegawai.destroy');
+    });
+
 
 //    DOKTER
     Route::get('/dokter',[\App\Http\Controllers\DokterController::class,'index'])->name('dokter.list');
@@ -45,6 +48,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/dokter/{dokter:id}/update',[\App\Http\Controllers\DokterController::class,'update'])->name('dokter.update');
     Route::delete('/dokter/{dokter:id}',[\App\Http\Controllers\DokterController::class,'destroy'])->name('dokter.destroy');
 
+    //    KUNJUNGAN
+    Route::get('/kunjugan', [\App\Http\Controllers\KunjunganController::class,'index'])->name('kunjungan.list');
+    Route::get('/kunjugan/create', [\App\Http\Controllers\KunjunganController::class,'create'])->name('kunjungan.create');
+    Route::post('/kunjugan/store', [\App\Http\Controllers\KunjunganController::class,'store'])->name('kunjungan.store');
 
     Route::get('/logout', [LoginController::class,'logout'])->name('logout');
 });

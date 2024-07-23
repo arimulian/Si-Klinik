@@ -1,12 +1,14 @@
 <x-layout title="Daftar Kunjungan Pasien✨">
     <div class="p-10 h-full">
+        <h1 class="text-xl mb-5 font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Kunjungan Pasien</h1>
+        @if(auth()->user()->isAdmin())
         <div class="mb-4 flex justify-between">
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Kunjungan Pasien</h1>
             <a href="{{ route('kunjungan.create') }}" class="text-white bg-primary hover:bg-primary-hover focus:ring-4
         focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5">
                 Tambah Daftar Kunjungan Pasien
             </a>
         </div>
+        @endif
         @if(session('status'))
             <div class="bg-green-100 mb-5  border-l-4 border-green-500 text-green-700 p-2" role="alert">
                 <p class="font-bold">{{ session('status')}}</p>
@@ -58,12 +60,14 @@
                         <td class="px-3 py-2 flex space-x-2">
                             <a href="{{route('pasien.edit', $item->id)}}" class="font-medium text-blue-600
                             hover:underline">Edit</a>
+                            @if(auth()->user()->isAdmin())
                             <form action="{{ route('pasien.destroy', $item->id) }}" method="POST">
                                 @csrf
                                 @method('delete')
                                 <button class="font-medium text-red-600
                             hover:underline" onclick="return confirm('Apakah Anda Yakin Menghapus Data?')">Delete</button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                     </tbody>

@@ -16,10 +16,7 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (auth()->attempt($credentials)) {
-            if (auth()->user()->isAdmin()) {
                 return redirect()->route('dashboard');
-            }
-            return 'dokter';
         }
         return back()->withInput()->with('status', 'Email atau Password yang anda masukan salah');
     }

@@ -1,12 +1,14 @@
 <x-layout title="Daftar Dokter✨">
     <div class="p-10 h-full">
-        <div class="mb-4 flex justify-between">
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Dokter</h1>
+        <h1 class="text-xl mb-5 font-semibold text-gray-900 sm:text-2xl dark:text-white">Daftar Dokter</h1>
+        @if(auth()->user()->isAdmin())
+        <div class="mb-4 flex justify-end">
             <a href="{{ route('dokter.create') }}" class="text-white bg-primary hover:bg-primary-hover focus:ring-4
         focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5">
                 Tambah Daftar Dokter
             </a>
         </div>
+        @endif
         @if(session('status'))
             <div class="bg-green-100 mb-5  border-l-4 border-green-500 text-green-700 p-2" role="alert">
                 <p class="font-bold">{{ session('status')}}</p>
@@ -25,9 +27,11 @@
                     <th scope="col" class="px-6 py-3">
                         Specialis
                     </th>
+                    @if(auth()->user()->isAdmin())
                     <th scope="col" class="px-6 py-3">
                         Action
                     </th>
+                    @endif
                 </tr>
                 </thead>
                 @foreach($data as $key => $item)
@@ -42,7 +46,7 @@
                         <td class="px-6 py-4">
                             {{ $item->spesialis}}
                         </td>
-
+                        @if(auth()->user()->isAdmin())
                         <td class="px-3 py-2 flex space-x-2">
                             <a href="{{route('dokter.edit', $item->id)}}" class="font-medium text-blue-600
                             hover:underline">Edit</a>
@@ -53,6 +57,7 @@
                             hover:underline" onclick="return confirm('Apakah Anda Yakin Menghapus Data?')">Delete</button>
                             </form>
                         </td>
+                            @endif
                     </tr>
                     </tbody>
                 @endforeach

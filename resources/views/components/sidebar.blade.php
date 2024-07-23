@@ -64,6 +64,7 @@
                                 <span class="ml-3 font-medium">Obat</span>
                             </a>
                         </li>
+                        @if(auth()->user()->isAdmin())
                         <li>
                             <a href="{{ route('pegawai.list') }}" class="flex items-center p-2 text-base
                             text-primary-dark
@@ -78,6 +79,7 @@
                                 <span class="ml-3 font-medium">Pegawai</span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </div>
             </div>
